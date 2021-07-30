@@ -1,0 +1,22 @@
+{
+  "name": "android-language-analyzer",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "build": "ncc build index.js -o dist --source-map --license licenses.txt",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allegro-actions/next-version.git"
+  },
+  "dependencies": {
+    "@actions/core": "^1.4.0"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.29.0",
+    "eslint": "^7.31.0",
+    "eslint-plugin-jest": "^24.4.0",
+    "jest": "^27.0.6"
+  }
+}
