@@ -8,11 +8,9 @@ inputs:
   REPORT_PATH:
     description: 'Path to report'
     required: true
-    default: './report.json'
   SUPPORTED_LANGUAGES:
     description: 'Supported languages like: pl,en,cs'
     required: true
-    default: 'en'
   STATS_ONLY:
     description: 'Print only statistics data without resources'
     required: false

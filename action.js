@@ -110,8 +110,10 @@ module.exports = async function action(config) {
 
     // Store data about module
     if (config.statsOnly) {
+      console.log('statsOnly: A');
       modules.push({ name: moduleName, stats: stats });
     } else {
+      console.log('statsOnly: B');
       modules.push({ name: moduleName, resources: resources, stats: stats });
     }
   }
