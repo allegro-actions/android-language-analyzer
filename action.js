@@ -109,13 +109,14 @@ module.exports = async function action(config) {
     }
 
     // Store data about module
-    if (config.statsOnly) {
-      console.log('statsOnly: A');
-      modules.push({ name: moduleName, stats: stats });
+    const moduleObj = { name: moduleName, stats: stats }
+    if (config.statsOnly == false) {
+      console.log('statsOnly: false');
+      moduleObj.resources = resources
     } else {
-      console.log('statsOnly: B');
-      modules.push({ name: moduleName, resources: resources, stats: stats });
+      console.log('statsOnly: true');
     }
+    modules.push(moduleObj);
   }
 
   const report = { modules: modules, totalStats: totalStats };
