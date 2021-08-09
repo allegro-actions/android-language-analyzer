@@ -109,10 +109,10 @@ module.exports = async function action(config) {
     }
 
     // Store data about module
-    const moduleObj = { name: moduleName, stats: stats }
+    const moduleObj = { name: moduleName, stats: stats };
     if (config.statsOnly == false) {
       console.log('statsOnly: false');
-      moduleObj.resources = resources
+      moduleObj.resources = resources;
     } else {
       console.log('statsOnly: true');
     }
