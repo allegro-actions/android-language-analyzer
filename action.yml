@@ -1,6 +1,23 @@
 name: "android-language-analyzer"
 description: "android-language-analyzer"
 
+inputs:
+  PROJECT_PATH:
+    description: 'Path to android project'
+    required: true
+  REPORT_PATH:
+    description: 'Path to report'
+    required: true
+    default: './report.json'
+  SUPPORTED_LANGUAGES:
+    description: 'Supported languages like: pl,en,cs'
+    required: true
+    default: 'en'
+  STATS_ONLY:
+    description: 'Print only statistics data without resources'
+    required: false
+    default: false
+
 runs:
   using: 'node12'
   main: 'dist/index.js'
