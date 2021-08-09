@@ -110,11 +110,11 @@ module.exports = async function action(config) {
 
     // Store data about module
     const moduleObj = { name: moduleName, stats: stats };
-    if (config.statsOnly == false) {
-      console.log('statsOnly: false');
+    if (!config.statsOnly) {
+      console.log('with res');
       moduleObj.resources = resources;
     } else {
-      console.log('statsOnly: true');
+      console.log('without res');
     }
     modules.push(moduleObj);
   }

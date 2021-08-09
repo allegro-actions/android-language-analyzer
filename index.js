@@ -16,7 +16,7 @@ console.log('statsOnly: ' + statsOnly);
     project: projectPath,
     report: reportPath,
     languages: supportedLanguages.split(','),
-    statsOnly: statsOnly
+    statsOnly: statsOnly == 'true'
   });
   core.setOutput('result', result);
 })().catch(err => {
