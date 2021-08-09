@@ -6,11 +6,6 @@ const reportPath = core.getInput('REPORT_PATH');
 const supportedLanguages = core.getInput('SUPPORTED_LANGUAGES');
 const statsOnly = core.getInput('STATS_ONLY');
 
-console.log('projectPath: ' + projectPath);
-console.log('reportPath: ' + reportPath);
-console.log('supportedLanguages: ' + supportedLanguages);
-console.log('statsOnly: ' + statsOnly);
-
 (async () => {
   const result = await action({
     project: projectPath,
