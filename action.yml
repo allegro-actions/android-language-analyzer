@@ -15,6 +15,10 @@ inputs:
     description: 'Print only statistics data without resources'
     required: false
     default: false
+  VERBOSE:
+    description: 'Print logs'
+    required: false
+    default: false
 
 runs:
   using: 'node12'

@@ -93,8 +93,16 @@ module.exports = async function action(config) {
     config.project = path.join(__dirname, config.project);
   }
 
+  if (config.verbose) {
+    console.log('Project path: ' + config.project);
+  }
+
   // Find all "values" directories
   const foundDirectories = findAllValuesDirectories(config.project);
+
+  if (config.verbose) {
+    console.log('Found directories: ' + foundDirectories);
+  }
 
   // Report object
   const totalStats = { default: 0 };
@@ -104,6 +112,10 @@ module.exports = async function action(config) {
   for (const directory of foundDirectories) {
     const moduleName = determineModuleName(directory, config.project);
     const moduleObj = getModuleObject(modules, moduleName);
+
+    if (config.verbose) {
+      console.log('Processsing module: ' + moduleName);
+    }
 
     // Fetch string resources from "values"
     const defaultRes = await findResources(directory);
@@ -139,11 +151,20 @@ module.exports = async function action(config) {
       delete moduleObj.resources;
     }
 
+    if (config.verbose) {
+      console.log('Module: ' + JSON.stringify(moduleObj, null, 2));
+    }
+
     modules.set(moduleName, moduleObj);
   }
 
   const report = { modules: Array.from(modules.values()), totalStats: totalStats };
   fs.writeFileSync(config.report, JSON.stringify(report, null, 2));
+
+
+  if (config.verbose) {
+    console.log('Total stats: ' + JSON.stringify(totalStats, null, 2));
+  }
 
   return totalStats;
 };
