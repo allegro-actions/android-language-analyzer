@@ -1,7 +1,7 @@
 const fs = require('fs');
 const klawSync = require('klaw-sync');
 const xml2js = require('xml2js');
-const path = require('path')
+const path = require('path');
 
 const parser = new xml2js.Parser({ attrkey: 'attr' });
 
@@ -81,16 +81,16 @@ function findAllValuesDirectories(pathToProject) {
 
 function getModuleObject(modules, name) {
   if (modules.has(name)) {
-    return modules.get(name)
+    return modules.get(name);
   } else {
-    return { name: name, stats: { default: 0 }, resources: { default: [] }}
+    return { name: name, stats: { default: 0 }, resources: { default: [] }};
   }
 }
 
 module.exports = async function action(config) {
   // Determine absolute path to project
   if (!path.isAbsolute(config.project)) {
-    config.project = path.join(__dirname, config.project)
+    config.project = path.join(__dirname, config.project);
   }
 
   // Find all "values" directories
@@ -136,10 +136,10 @@ module.exports = async function action(config) {
     }
 
     if (config.statsOnly) {
-      delete moduleObj.resources
+      delete moduleObj.resources;
     }
 
-    modules.set(moduleName, moduleObj)
+    modules.set(moduleName, moduleObj);
   }
 
   const report = { modules: Array.from(modules.values()), totalStats: totalStats };
