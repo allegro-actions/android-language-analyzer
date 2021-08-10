@@ -89,9 +89,7 @@ function getModuleObject(modules, name) {
 
 module.exports = async function action(config) {
   // Determine absolute path to project
-  if (!path.isAbsolute(config.project)) {
-    config.project = path.join(__dirname, config.project);
-  }
+  config.project = path.resolve(config.project);
 
   if (config.verbose) {
     console.log('Project path: ' + config.project);
