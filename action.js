@@ -112,7 +112,7 @@ module.exports = async function action(config) {
     const moduleObj = getModuleObject(modules, moduleName);
 
     if (config.verbose) {
-      console.log('Processsing module: ' + moduleName);
+      console.log('Processsing directory: ' + directory);
     }
 
     // Fetch string resources from "values"
