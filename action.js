@@ -1,6 +1,7 @@
 const fs = require('fs');
 const klawSync = require('klaw-sync');
 const xml2js = require('xml2js');
+const path = require('path')
 
 const parser = new xml2js.Parser({ attrkey: 'attr' });
 
@@ -67,7 +68,7 @@ function determineModuleName(directory, pathToProject) {
 
 function findAllValuesDirectories(pathToProject) {
   const klawFilter = item => {
-    return item.path.includes('/res/values') && !item.path.includes('/build/');
+    return item.path.endsWith('/res/values') && !item.path.includes('/build/');
   };
 
   return klawSync(pathToProject, {
@@ -78,45 +79,70 @@ function findAllValuesDirectories(pathToProject) {
   }).map(item => item.path);
 }
 
+function getModuleObject(modules, name) {
+  if (modules.has(name)) {
+    return modules.get(name)
+  } else {
+    return { name: name, stats: { default: 0 }, resources: { default: [] }}
+  }
+}
+
 module.exports = async function action(config) {
+  // Determine absolute path to project
+  if (!path.isAbsolute(config.project)) {
+    config.project = path.join(__dirname, config.project)
+  }
+
   // Find all "values" directories
   const foundDirectories = findAllValuesDirectories(config.project);
 
   // Report object
   const totalStats = { default: 0 };
-  const modules = [];
+  const modules = new Map();
 
   // Iterate through founded directory
   for (const directory of foundDirectories) {
     const moduleName = determineModuleName(directory, config.project);
-    const resources = { default: 0 };
-    const stats = { default: 0 };
+    const moduleObj = getModuleObject(modules, moduleName);
 
     // Fetch string resources from "values"
-    resources.default = await findResources(directory);
-    stats.default = resources.default.length;
-    totalStats.default += resources.default.length;
+    const defaultRes = await findResources(directory);
+    if (!config.statsOnly) {
+      moduleObj.resources.default = moduleObj.resources.default.concat(defaultRes);
+    }
+    moduleObj.stats.default += defaultRes.length;
+    totalStats.default += defaultRes.length;
 
     // Fetch string resources from "values-xx"
     for (const language of config.languages) {
-      resources[language] = await findResources(directory + '-' + language);
-      stats[language] = resources[language].length;
+      const languageRes = await findResources(directory + '-' + language);
+
+      if (!config.statsOnly) {
+        if (moduleObj.resources[language] === undefined) {
+          moduleObj.resources[language] = [];
+        }
+        moduleObj.resources[language] = moduleObj.resources[language].concat(languageRes);
+      }
+
+      if (moduleObj.stats[language] === undefined) {
+        moduleObj.stats[language] = 0;
+      }
+      moduleObj.stats[language] += languageRes.length;
 
       if (totalStats[language] === undefined) {
         totalStats[language] = 0;
       }
-      totalStats[language] += resources[language].length;
+      totalStats[language] += languageRes.length;
     }
 
-    // Store data about module
-    const moduleObj = { name: moduleName, stats: stats };
-    if (!config.statsOnly) {
-      moduleObj.resources = resources;
+    if (config.statsOnly) {
+      delete moduleObj.resources
     }
-    modules.push(moduleObj);
+
+    modules.set(moduleName, moduleObj)
   }
 
-  const report = { modules: modules, totalStats: totalStats };
+  const report = { modules: Array.from(modules.values()), totalStats: totalStats };
   fs.writeFileSync(config.report, JSON.stringify(report, null, 2));
 
   return totalStats;
