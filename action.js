@@ -5,6 +5,24 @@ const path = require('path');
 
 const parser = new xml2js.Parser({ attrkey: 'attr' });
 
+module.exports =  {
+  action(config) {
+    return internalAction(config);
+  },
+
+  determineModuleName(directory, pathToProject) {
+    return internalDetermineModuleName(directory, pathToProject);
+  },
+
+  findAllValuesDirectories(pathToProject) {
+    return internalFindAllValuesDirectories(pathToProject);
+  },
+
+  getModuleObject(modules, name) {
+    return internalGetModuleObject(modules, name);
+  }
+};
+
 async function xml2json(xml) {
   return new Promise((resolve, reject) => {
     parser.parseString(xml, function (err, json) {
@@ -58,7 +76,7 @@ async function findResources(path) {
   return ids;
 }
 
-function determineModuleName(directory, pathToProject) {
+function internalDetermineModuleName(directory, pathToProject) {
   var moduleName = directory.replace(pathToProject,'').split('/src/')[0];
   if (moduleName.startsWith('/')) {
     moduleName = moduleName.substring(1);
@@ -66,7 +84,7 @@ function determineModuleName(directory, pathToProject) {
   return moduleName;
 }
 
-function findAllValuesDirectories(pathToProject) {
+function internalFindAllValuesDirectories(pathToProject) {
   const klawFilter = item => {
     return item.path.endsWith('/res/values') && !item.path.includes('/build/');
   };
@@ -79,7 +97,7 @@ function findAllValuesDirectories(pathToProject) {
   }).map(item => item.path);
 }
 
-function getModuleObject(modules, name) {
+function internalGetModuleObject(modules, name) {
   if (modules.has(name)) {
     return modules.get(name);
   } else {
@@ -87,7 +105,7 @@ function getModuleObject(modules, name) {
   }
 }
 
-module.exports = async function action(config) {
+async function internalAction(config) {
   // Determine absolute path to project
   config.project = path.resolve(config.project);
 
@@ -96,7 +114,7 @@ module.exports = async function action(config) {
   }
 
   // Find all "values" directories
-  const foundDirectories = findAllValuesDirectories(config.project);
+  const foundDirectories = internalFindAllValuesDirectories(config.project);
 
   if (config.verbose) {
     console.log('Found directories: ' + foundDirectories);
@@ -108,8 +126,8 @@ module.exports = async function action(config) {
 
   // Iterate through founded directory
   for (const directory of foundDirectories) {
-    const moduleName = determineModuleName(directory, config.project);
-    const moduleObj = getModuleObject(modules, moduleName);
+    const moduleName = internalDetermineModuleName(directory, config.project);
+    const moduleObj = internalGetModuleObject(modules, moduleName);
 
     if (config.verbose) {
       console.log('Processsing directory: ' + directory);
@@ -159,10 +177,9 @@ module.exports = async function action(config) {
   const report = { modules: Array.from(modules.values()), totalStats: totalStats };
   fs.writeFileSync(config.report, JSON.stringify(report, null, 2));
 
-
   if (config.verbose) {
     console.log('Total stats: ' + JSON.stringify(totalStats, null, 2));
   }
 
-  return totalStats;
-};
+  return report;
+}
