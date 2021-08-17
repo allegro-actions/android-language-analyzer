@@ -1,0 +1,25 @@
+{
+  "modules": [
+    {
+      "name": "app",
+      "stats": {
+        "default": 12,
+        "pl": 1,
+        "en": 10
+      }
+    },
+    {
+      "name": "library",
+      "stats": {
+        "default": 7,
+        "pl": 5,
+        "en": 0
+      }
+    }
+  ],
+  "totalStats": {
+    "default": 19,
+    "pl": 6,
+    "en": 10
+  }
+}
