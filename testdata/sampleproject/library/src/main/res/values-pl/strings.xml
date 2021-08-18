@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tif_channel_setup_title">Ustawienia kanału</string>
+    <string name="tif_channel_setup_description">To może chwilę potrwać</string>
+    <string name="tif_channel_setup_cancel">Zatrzymaj skanowanie</string>
+    <string name="tif_channel_scan_canceled">Skanowanie zatrzymane</string>
+    <string name="tif_channel_error_unknown">Nieznany bład</string>
+</resources>
