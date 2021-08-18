@@ -20,16 +20,16 @@ steps:
 
 ### Options
 
-- **PROJECT_PATH** represents relative path to the android project directory in the workspace
-- **REPORT_PATH** represents relative path to the report about text resources
-- **SUPPORTED_LANGUAGES** list of languages selected for the report
-- **STATS_ONLY** if `true` then only stats will be reported otherwise resources `id`s will also included
-- **VERBOSE** if `true` logs are printed into console
+- **PROJECT_PATH** represents relative path to the android project directory in the workspace.
+- **REPORT_PATH** represents relative path to the report about text resources.
+- **SUPPORTED_LANGUAGES** list of languages selected for the report.
+- **STATS_ONLY** if `true` then only stats will be reported otherwise resources `id`s will also included.
+- **VERBOSE** if `true` logs are printed into console.
 
 ## Limitations
 
-- `<string id="someId" translatable="false">..</string>` Strings with `translatable` argument set to `false` are ignored in the report.
-- Only simple named `values-xx` directory are scanned. If your selected languages are `pl`, `en-rGB`, `fr` then action looks for `values-pl`, `values-en-rGB`, `values-fr` directories. Any directory with more then one qualifier (like `values-en-sw600dp-land`) is ignored.
+- `<string id="someId" translatable="false">..</string>` Action ignores `strings` where `translatable` argument is set to `false`.
+- Only simple named `values-xx` directories are scanned. If your selected languages are `pl`, `en-rGB`, `fr` then action looks for `values-pl`, `values-en-rGB`, `values-fr` directories. Any directory with more then one qualifier (like `values-en-sw600dp-land`) is ignored.
 
 ## Sample report
 
