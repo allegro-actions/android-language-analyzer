@@ -28,7 +28,7 @@ steps:
 
 ## Limitations
 
-- `<string id="someId" translatable="false">..</string>` Action ignores `strings` where `translatable` argument is set to `false`.
+- `<string id="someId" translatable="false">..</string>` Action ignores `strings` and `string-array` where `translatable` argument is set to `false`.
 - Only simple named `values-xx` directories are scanned. If your selected languages are `pl`, `en-rGB`, `fr` then action looks for `values-pl`, `values-en-rGB`, `values-fr` directories. Any directory with more then one qualifier (like `values-en-sw600dp-land`) is ignored.
 
 ## Sample report
