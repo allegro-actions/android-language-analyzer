@@ -64,7 +64,9 @@ async function findResources(path) {
       const stringArray = resources['string-array'];
       if (stringArray) {
         for (const item of stringArray) {
-          ids.push(item.attr.name);
+          if (item.attr.translatable != 'false') {
+            ids.push(item.attr.name);
+          }
         }
       }
     }
