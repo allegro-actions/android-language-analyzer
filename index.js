@@ -17,5 +17,6 @@ const verbose = core.getInput('VERBOSE');
   });
   core.setOutput('result', result);
 })().catch(err => {
-    console.error(err);
+    core.error(err);
+    core.setFailed(err);
 });

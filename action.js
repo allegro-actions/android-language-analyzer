@@ -1,4 +1,5 @@
 const fs = require('fs');
+const core = require('@actions/core');
 const klawSync = require('klaw-sync');
 const xml2js = require('xml2js');
 const path = require('path');
@@ -72,7 +73,8 @@ async function findResources(path) {
     }
   } catch (error) {
     if (error.code != 'ENOENT') {
-      console.error(error);
+      core.error(error);
+      core.setFailed(error);
     }
   }
   return ids;
@@ -112,14 +114,14 @@ async function internalAction(config) {
   config.project = path.resolve(config.project);
 
   if (config.verbose) {
-    console.log('Project path: ' + config.project);
+    core.info('Project path: ' + config.project);
   }
 
   // Find all "values" directories
   const foundDirectories = internalFindAllValuesDirectories(config.project);
 
   if (config.verbose) {
-    console.log('Found directories: ' + foundDirectories);
+    core.info('Found directories: ' + foundDirectories);
   }
 
   // Report object
@@ -132,7 +134,7 @@ async function internalAction(config) {
     const moduleObj = internalGetModuleObject(modules, moduleName);
 
     if (config.verbose) {
-      console.log('Processsing directory: ' + directory);
+      core.info('Processsing directory: ' + directory);
     }
 
     // Fetch string resources from "values"
@@ -170,7 +172,7 @@ async function internalAction(config) {
     }
 
     if (config.verbose) {
-      console.log('Module: ' + JSON.stringify(moduleObj, null, 2));
+      core.info('Module: ' + JSON.stringify(moduleObj, null, 2));
     }
 
     modules.set(moduleName, moduleObj);
@@ -180,7 +182,7 @@ async function internalAction(config) {
   fs.writeFileSync(config.report, JSON.stringify(report, null, 2));
 
   if (config.verbose) {
-    console.log('Total stats: ' + JSON.stringify(totalStats, null, 2));
+    core.info('Total stats: ' + JSON.stringify(totalStats, null, 2));
   }
 
   return report;
