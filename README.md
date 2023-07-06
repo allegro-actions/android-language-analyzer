@@ -148,3 +148,7 @@ With configuration: `STATS_ONLY: false` and `SUPPORTED_LANGUAGES: pl,en`
   }
 }
 ```
+
+### How to test
+
+Run command: `export INPUT_PROJECT_PATH=./testdata && INPUT_REPORT_PATH=./report.json && export INPUT_VERBOSE=true && export INPUT_SUPPORTED_LANGUAGES=pl,en && node index.js`

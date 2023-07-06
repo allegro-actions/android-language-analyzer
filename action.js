@@ -46,6 +46,11 @@ async function findResources(path) {
       const jsonData = await xml2json(xmlData);
       const resources = jsonData.resources;
 
+      // Ignore whole file if it begins with: <resources translatable="false">
+      if (resources.attr != undefined && resources.attr.translatable == 'false') {
+        continue;
+      }
+
       const string = resources.string;
       if (string) {
         for (const item of string) {
@@ -81,7 +86,7 @@ async function findResources(path) {
 }
 
 function internalDetermineModuleName(directory, pathToProject) {
-  var moduleName = directory.replace(pathToProject,'').split('/src/')[0];
+  let moduleName = directory.replace(pathToProject,'').split('/src/')[0];
   if (moduleName.startsWith('/')) {
     moduleName = moduleName.substring(1);
   }
@@ -179,11 +184,12 @@ async function internalAction(config) {
   }
 
   const report = { modules: Array.from(modules.values()), totalStats: totalStats };
-  fs.writeFileSync(config.report, JSON.stringify(report, null, 2));
 
   if (config.verbose) {
     core.info('Total stats: ' + JSON.stringify(totalStats, null, 2));
   }
+
+  fs.writeFileSync(config.report, JSON.stringify(report, null, 2));
 
   return report;
 }

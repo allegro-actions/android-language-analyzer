@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources translatable="false">
+  <string name="inner_1">Inner 1</string>
+  <string name="inner_2">Inner 2</string>
+  <string name="inner_3">Inner 3</string>
+  <string name="inner_4">Inner 4</string>
+</resources>
