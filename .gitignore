@@ -1,6 +1,7 @@
 node_modules/
 coverage/
 dist/
+.idea/
 .DS_Store
 testdata/full_report.json
 testdata/stats_report.json

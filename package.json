@@ -1,5 +1,6 @@
 {
   "name": "android-language-analyzer",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
