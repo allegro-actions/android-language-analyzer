@@ -1,11 +1,11 @@
-const core = require('@actions/core');
-const { action } = require('./action');
+import { getInput, setOutput, error, setFailed } from '@actions/core';
+import { action } from './action.js';
 
-const projectPath = core.getInput('PROJECT_PATH');
-const reportPath = core.getInput('REPORT_PATH');
-const supportedLanguages = core.getInput('SUPPORTED_LANGUAGES');
-const statsOnly = core.getInput('STATS_ONLY');
-const verbose = core.getInput('VERBOSE');
+const projectPath = getInput('PROJECT_PATH');
+const reportPath = getInput('REPORT_PATH');
+const supportedLanguages = getInput('SUPPORTED_LANGUAGES');
+const statsOnly = getInput('STATS_ONLY');
+const verbose = getInput('VERBOSE');
 
 (async () => {
   const result = await action({
@@ -15,8 +15,8 @@ const verbose = core.getInput('VERBOSE');
     statsOnly: statsOnly == 'true',
     verbose: verbose == 'true'
   });
-  core.setOutput('result', result);
+  setOutput('result', result);
 })().catch(err => {
-    core.error(err);
-    core.setFailed(err);
+    error(err);
+    setFailed(err);
 });
