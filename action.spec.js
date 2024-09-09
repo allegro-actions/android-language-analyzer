@@ -1,9 +1,4 @@
-const {
-  action,
-  determineModuleName,
-  findAllValuesDirectories,
-  getModuleObject
-} = require('./action');
+import { action, determineModuleName, findAllValuesDirectories, getModuleObject } from './action.js';
 
 describe('action', () => {
 
