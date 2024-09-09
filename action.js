@@ -1,28 +1,23 @@
-const fs = require('fs');
-const core = require('@actions/core');
-const klawSync = require('klaw-sync');
-const xml2js = require('xml2js');
-const path = require('path');
+import { readdirSync, readFileSync, writeFileSync } from 'fs';
+import { error as _error, setFailed, info } from '@actions/core';
+import klawSync from 'klaw-sync';
+import { Parser } from 'xml2js';
+import { resolve as _resolve } from 'path';
 
-const parser = new xml2js.Parser({ attrkey: 'attr' });
+const parser = new Parser({ attrkey: 'attr' });
 
-module.exports =  {
-  action(config) {
-    return internalAction(config);
-  },
-
-  determineModuleName(directory, pathToProject) {
-    return internalDetermineModuleName(directory, pathToProject);
-  },
-
-  findAllValuesDirectories(pathToProject) {
-    return internalFindAllValuesDirectories(pathToProject);
-  },
-
-  getModuleObject(modules, name) {
-    return internalGetModuleObject(modules, name);
-  }
-};
+export function action(config) {
+  return internalAction(config);
+}
+export function determineModuleName(directory, pathToProject) {
+  return internalDetermineModuleName(directory, pathToProject);
+}
+export function findAllValuesDirectories(pathToProject) {
+  return internalFindAllValuesDirectories(pathToProject);
+}
+export function getModuleObject(modules, name) {
+  return internalGetModuleObject(modules, name);
+}
 
 async function xml2json(xml) {
   return new Promise((resolve, reject) => {
@@ -39,10 +34,10 @@ async function xml2json(xml) {
 async function findResources(path) {
   const ids = [];
   try {
-    const files = fs.readdirSync(path);
+    const files = readdirSync(path);
 
     for (const file of files) {
-      const xmlData = fs.readFileSync(path + '/' + file, { encoding: 'utf8', flag: 'r' });
+      const xmlData = readFileSync(path + '/' + file, { encoding: 'utf8', flag: 'r' });
       const jsonData = await xml2json(xmlData);
       const resources = jsonData.resources;
 
@@ -78,8 +73,8 @@ async function findResources(path) {
     }
   } catch (error) {
     if (error.code != 'ENOENT') {
-      core.error(error);
-      core.setFailed(error);
+      _error(error);
+      setFailed(error);
     }
   }
   return ids;
@@ -116,17 +111,17 @@ function internalGetModuleObject(modules, name) {
 
 async function internalAction(config) {
   // Determine absolute path to project
-  config.project = path.resolve(config.project);
+  config.project = _resolve(config.project);
 
   if (config.verbose) {
-    core.info('Project path: ' + config.project);
+    info('Project path: ' + config.project);
   }
 
   // Find all "values" directories
   const foundDirectories = internalFindAllValuesDirectories(config.project);
 
   if (config.verbose) {
-    core.info('Found directories: ' + foundDirectories);
+    info('Found directories: ' + foundDirectories);
   }
 
   // Report object
@@ -139,7 +134,7 @@ async function internalAction(config) {
     const moduleObj = internalGetModuleObject(modules, moduleName);
 
     if (config.verbose) {
-      core.info('Processsing directory: ' + directory);
+      info('Processsing directory: ' + directory);
     }
 
     // Fetch string resources from "values"
@@ -177,7 +172,7 @@ async function internalAction(config) {
     }
 
     if (config.verbose) {
-      core.info('Module: ' + JSON.stringify(moduleObj, null, 2));
+      info('Module: ' + JSON.stringify(moduleObj, null, 2));
     }
 
     modules.set(moduleName, moduleObj);
@@ -186,10 +181,10 @@ async function internalAction(config) {
   const report = { modules: Array.from(modules.values()), totalStats: totalStats };
 
   if (config.verbose) {
-    core.info('Total stats: ' + JSON.stringify(totalStats, null, 2));
+    info('Total stats: ' + JSON.stringify(totalStats, null, 2));
   }
 
-  fs.writeFileSync(config.report, JSON.stringify(report, null, 2));
+  writeFileSync(config.report, JSON.stringify(report, null, 2));
 
   return report;
 }
