@@ -8,13 +8,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Use Node.js 18.x
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 18.x
           cache: 'npm'
       - run: npm ci
       - run: npm run lint
       - run: npm test -- --coverage
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v5
